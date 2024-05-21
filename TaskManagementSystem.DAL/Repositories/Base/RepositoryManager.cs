@@ -1,7 +1,7 @@
-﻿using TaskManagementSystem.BLL.Abstract;
+﻿using TaskManagementSystem.BLL.Repositories.Base;
 using TaskManagementSystem.DAL.Context;
 
-namespace TaskManagementSystem.BLL.Concrete
+namespace TaskManagementSystem.DAL.Repositories.Base
 {
     public class RepositoryManager : IRepositoryManager
     {
@@ -17,10 +17,10 @@ namespace TaskManagementSystem.BLL.Concrete
             return _context.SaveChanges();
         }
 
-        public Task<int> CommitAsync()
+        public async Task<int> CommitAsync()
         {
-            return _context.SaveChangesAsync();
+            var count = await _context.SaveChangesAsync();
+            return count;
         }
     }
 }
-

@@ -19,4 +19,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TaskManagementSystem.BLL\TaskManagementSystem.BLL.csproj" />
+    <ProjectReference Include="..\TaskManagementSystem.Core\TaskManagementSystem.Core.csproj" />
+  </ItemGroup>
+
 </Project>

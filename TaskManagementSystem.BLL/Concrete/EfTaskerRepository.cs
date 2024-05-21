@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+﻿/*using System.Linq.Expressions;
 using TaskManagementSystem.BLL.Abstract;
 using TaskManagementSystem.Core.ViewModel;
 using TaskManagementSystem.DAL.Entities;
@@ -84,6 +84,8 @@ namespace TaskManagementSystem.BLL.Concrete
 
         public IQueryable<Tasker> GetAll(Expression<Func<Tasker, bool>>? predicate = null)
         {
+
+
             return _taskerRepository.GetAll(predicate);
         }
 
@@ -99,3 +101,4 @@ namespace TaskManagementSystem.BLL.Concrete
 
     }
 }
+*/

@@ -12,8 +12,8 @@ using TaskManagementSystem.DAL.Context;
 namespace TaskManagementSystem.DAL.Migrations
 {
     [DbContext(typeof(TaskerApplicationDbContext))]
-    [Migration("20240521083918_Initial")]
-    partial class Initial
+    [Migration("20240521195230_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace TaskManagementSystem.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TaskManagementSystem.DAL.Entities.Task", b =>
+            modelBuilder.Entity("TaskManagementSystem.Core.Entities.Tasker", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,52 +45,13 @@ namespace TaskManagementSystem.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Tasks");
-                });
-
-            modelBuilder.Entity("TaskManagementSystem.DAL.Entities.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("TaskManagementSystem.DAL.Entities.Task", b =>
-                {
-                    b.HasOne("TaskManagementSystem.DAL.Entities.User", "User")
-                        .WithMany("Tasks")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TaskManagementSystem.DAL.Entities.User", b =>
-                {
-                    b.Navigation("Tasks");
+                    b.ToTable("Taskers");
                 });
 #pragma warning restore 612, 618
         }

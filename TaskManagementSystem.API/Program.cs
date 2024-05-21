@@ -1,28 +1,28 @@
 using Microsoft.EntityFrameworkCore;
-using TaskManagementSystem.BLL.Abstract;
-using TaskManagementSystem.BLL.Concrete;
+using TaskManagementSystem.BLL.Repositories;
+using TaskManagementSystem.BLL.Repositories.Base;
 using TaskManagementSystem.DAL.Context;
+using TaskManagementSystem.DAL.Repositories;
+using TaskManagementSystem.DAL.Repositories.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new ArgumentNullException("Connection string is null!");
+
+// Add database
 builder.Services.AddDbContext<TaskerApplicationDbContext>(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
-
-    options.UseSqlServer(connectionString);
+    options.UseSqlServer(connectionString, opt => opt.MigrationsAssembly("TaskManagementSystem.DAL"));
 });
 
-builder.Services.AddTransient<ITaskerRepository, EfTaskerRepository>(provider =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
-
-    return new EfTaskerRepository(provider.GetRequiredService<ITaskerRepository>(), provider.GetRequiredService<IRepositoryManager>());
-});
+// Add Repositories
+builder.Services.AddTransient<IRepositoryManager, RepositoryManager>();
+builder.Services.AddTransient<ITaskerRepository, TaskerRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

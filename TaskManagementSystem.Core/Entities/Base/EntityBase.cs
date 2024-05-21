@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TaskManagementSystem.DAL.Entities.Base
+namespace TaskManagementSystem.Core.Entities.Base
 {
-    public abstract class EntityBase : IEntityBase
+    public abstract class EntityBase
     {
         [Key]
         public Guid Id { get; set; }
-        [Required]
         public bool IsDeleted { get; set; }
     }
 }

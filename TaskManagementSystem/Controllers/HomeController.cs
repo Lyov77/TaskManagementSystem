@@ -1,22 +1,30 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TaskManagementSystem.Models;
+using TaskManagementSystem.Services;
 
 namespace TaskManagementSystem.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IHttpClientService _httpClientService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IHttpClientService httpClientService)
         {
             _logger = logger;
+            this._httpClientService = httpClientService;
         }
 
         public IActionResult Index()
         {
+            var userId = User?.Claims.First().Value;
             return View();
         }
+
+        /*var result = await _httpClientService
+               .GetAll(Guid.Parse("ac998f28-8dee-4218-d465-08dc79bfec8a"));*/
 
         public IActionResult Privacy()
         {
@@ -27,6 +35,15 @@ namespace TaskManagementSystem.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            var userId = Guid.Parse(User?.Claims.First().Value);
+            var result = await _httpClientService.GetAll(userId);
+            return View(result);
         }
     }
 }

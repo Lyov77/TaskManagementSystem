@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskManagementSystem.DAL.Entities;
+﻿/*using System.ComponentModel.DataAnnotations;
 
 namespace TaskManagementSystem.Core.ViewModel
 {
@@ -18,3 +12,4 @@ namespace TaskManagementSystem.Core.ViewModel
         public virtual ICollection<Tasker> Tasks { get; set; } = [];
     }
 }
+*/

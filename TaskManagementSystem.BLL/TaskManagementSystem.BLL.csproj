@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskManagementSystem.Core\TaskManagementSystem.Core.csproj" />
-    <ProjectReference Include="..\TaskManagementSystem.DAL\TaskManagementSystem.DAL.csproj" />
   </ItemGroup>
 
 </Project>

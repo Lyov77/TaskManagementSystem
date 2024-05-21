@@ -1,15 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace TaskManagementSystem.Core.ViewModel
+﻿namespace TaskManagementSystem.Core.DTOs
 {
-    public class TaskerViewModel
+    public class TaskerDto
     {
         public Guid Id { get; set; }
-        [Required]
         public string Title { get; set; } = string.Empty;
-        [Required]
         public string Description { get; set; } = string.Empty;
-        [Required]
         public bool IsCompleted { get; set; }
     }
 }
