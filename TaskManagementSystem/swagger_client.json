@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Tasker": {
+    "/api/Tasker/add": {
       "post": {
         "tags": [
           "Tasker"
@@ -36,7 +36,7 @@
         }
       }
     },
-    "/api/Tasker/{userId}": {
+    "/api/Tasker/getAll/{userId}": {
       "get": {
         "tags": [
           "Tasker"
@@ -84,7 +84,7 @@
         }
       }
     },
-    "/api/Tasker/status/{userId}/{taskerId}": {
+    "/api/Tasker/changeStatus/{userId}/{taskerId}": {
       "put": {
         "tags": [
           "Tasker"
@@ -108,6 +108,87 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Tasker/deleteTask/{userId}/{taskerId}": {
+      "put": {
+        "tags": [
+          "Tasker"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "taskerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Tasker/editTask/{userId}/{taskerId}": {
+      "put": {
+        "tags": [
+          "Tasker"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "taskerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskerDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskerDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskerDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success"

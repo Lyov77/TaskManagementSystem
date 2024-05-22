@@ -17,7 +17,7 @@ namespace TaskManagementSystem.Services
 
         public async Task<List<TaskerViewModel>> GetAll(string userId)
         {
-            var dtos = await _client.TaskerAllAsync(userId);
+            var dtos = await _client.GetAllAsync(userId);
 
             var result = dtos.Select(x => new TaskerViewModel
             {
@@ -32,7 +32,7 @@ namespace TaskManagementSystem.Services
 
         public async Task ChangeStatusAsync(string userId, Guid taskerId)
         {
-            await _client.StatusAsync(userId, taskerId);
+            await _client.ChangeStatusAsync(userId, taskerId);
         }
     }
 }

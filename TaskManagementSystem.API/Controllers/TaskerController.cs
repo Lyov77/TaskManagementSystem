@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using TaskManagementSystem.BLL.Repositories;
 using TaskManagementSystem.BLL.Repositories.Base;
 using TaskManagementSystem.Core.DTOs;
@@ -23,7 +22,7 @@ namespace TaskManagementSystem.API.Controllers
             _repositoryManager = repositoryManager;
         }
 
-        [HttpPost]
+        [HttpPost("add")]
         public async Task<IActionResult> AddAsync([FromBody] CreateTaskerDto dto)
         {
             var entity = new Tasker
@@ -38,7 +37,7 @@ namespace TaskManagementSystem.API.Controllers
             return Ok();
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("getAll/{userId}")]
         public async Task<ActionResult<TaskerDto[]>> GetAllAsync([FromRoute] string userId)
         {
             var taskers = await _taskerRepository
@@ -55,7 +54,7 @@ namespace TaskManagementSystem.API.Controllers
             return Ok(taskers);
         }
 
-        [HttpPut("status/{userId}/{taskerId}")]
+        [HttpPut("changeStatus/{userId}/{taskerId}")]
         public async Task<IActionResult> ChangeStatusAsync(string userId, Guid taskerId)
         {
             var entity = await _taskerRepository
@@ -72,6 +71,49 @@ namespace TaskManagementSystem.API.Controllers
             await _repositoryManager.CommitAsync();
             return Ok();
         }
+
+
+        [HttpPut("deleteTask/{userId}/{taskerId}")]
+        public async Task<IActionResult> DeleteAsync(string userId, Guid taskerId)
+        {
+            var entity = await _taskerRepository
+                .GetAll(x => x.UserId == userId && x.Id == taskerId)
+                .FirstOrDefaultAsync();
+
+            if (entity == null)
+            {
+                return BadRequest("Task not found!");
+            }
+
+            entity.IsDeleted = true;
+            _taskerRepository.Update(entity);
+            await _repositoryManager.CommitAsync();
+            return Ok();
+        }
+
+
+        [HttpPut("editTask/{userId}/{taskerId}")]
+        public async Task<IActionResult> EditAsync(string userId, Guid taskerId, [FromBody] TaskerDto dto)
+        {
+            var entity = await _taskerRepository
+                .GetAll(x => x.UserId == userId && x.Id == taskerId && !x.IsDeleted)
+                .FirstOrDefaultAsync();
+
+            if (entity == null)
+            {
+                return NotFound("Task not found!");
+            }
+
+            entity.Title = dto.Title;
+            entity.Description = dto.Description;
+            entity.IsCompleted = dto.IsCompleted;
+
+
+            _taskerRepository.Update(entity);
+            await _repositoryManager.CommitAsync();
+            return Ok();
+        }
+
 
     }
 }

@@ -13,6 +13,10 @@
             <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
         </form>
     </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Tasker" asp-action="Create">Create New Task</a>
+        </li>
+        <!-- Add buttons for other actions here -->
 }
 else
 {
@@ -24,3 +28,37 @@ else
     </li>
 }
 </ul>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Is Completed</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model.Tasks)
+            {
+                <tr>
+                    <td>@task.Id</td>
+                    <td>@task.Title</td>
+                    <td>@task.Description</td>
+                    <td>@task.IsCompleted</td>
+                    <td>
+                        <a class="btn btn-primary" asp-controller="Tasker" asp-action="Edit" asp-route-id="@task.Id">Edit</a>
+                        <a class="btn btn-success" asp-controller="Tasker" asp-action="ChangeStatus" asp-route-id="@task.Id">Change Status</a>
+                        <form asp-controller="Tasker" asp-action="Delete" method="post">
+                            <input type="hidden" name="id" value="@task.Id" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
