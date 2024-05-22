@@ -6,6 +6,7 @@ using TaskManagementSystem.Services;
 
 namespace TaskManagementSystem.Controllers
 {
+    [Controller]
     public class TaskerController : Controller
     {
 
@@ -24,20 +25,20 @@ namespace TaskManagementSystem.Controllers
             var result = await _httpClientService.GetAll(userId.ToString());
             return View(result);
         }
-
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
-
-
-        public async Task<IActionResult> CreateTasker(CreateTaskerDto createTaskerDto)
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateTaskerDto createTaskerDto)
         {
 
-            if (!ModelState.IsValid)
+            if (createTaskerDto.Title is null || createTaskerDto.Description is null)
+            //if (!ModelState.IsValid)
             {
-                // If model state is not valid, return the view with validation errors
-                return View(createTaskerDto);
+                // If the model state is not valid, return the view with validation errors
+                return View();
             }
 
             var userId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -51,8 +52,6 @@ namespace TaskManagementSystem.Controllers
             };
 
             var createTaskerDtoJson = JsonConvert.SerializeObject(taskerViewModel);
-
-
             TempData["CreateTaskerDto"] = createTaskerDtoJson;
 
 
@@ -67,46 +66,49 @@ namespace TaskManagementSystem.Controllers
             return RedirectToAction("Index");
         }
 
+
         public async Task<IActionResult> Edit(string userId, Guid taskerId, TaskerDto taskerDto)
         {
-            
+
             await _httpClientService.EditAsync(userId, taskerId, taskerDto);
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Delete(string userId, Guid taskerId)
+
+        public async Task<IActionResult> Delete([FromRoute] Guid taskerId)
         {
+            var userId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
             await _httpClientService.DeleteAsync(userId, taskerId);
             return RedirectToAction("Index");
         }
 
-       /* public async Task<IActionResult> ChangeCompletedStatus(CreateTaskerDto createTaskerDto)
-        {
+        /* public async Task<IActionResult> ChangeCompletedStatus(CreateTaskerDto createTaskerDto)
+         {
 
-            if (!ModelState.IsValid)
-            {
-                // If model state is not valid, return the view with validation errors
-                return View(createTaskerDto);
-            }
+             if (!ModelState.IsValid)
+             {
+                 // If model state is not valid, return the view with validation errors
+                 return View(createTaskerDto);
+             }
 
-            var userId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            createTaskerDto.UserId = userId;
+             var userId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
+             createTaskerDto.UserId = userId;
 
-            var taskerViewModel = new TaskerViewModel
-            {
-                Id = Guid.NewGuid(),
-                Title = createTaskerDto.Title,
-                Description = createTaskerDto.Description,
-            };
+             var taskerViewModel = new TaskerViewModel
+             {
+                 Id = Guid.NewGuid(),
+                 Title = createTaskerDto.Title,
+                 Description = createTaskerDto.Description,
+             };
 
-            var createTaskerDtoJson = JsonConvert.SerializeObject(taskerViewModel);
-
-
-            TempData["CreateTaskerDto"] = createTaskerDtoJson;
+             var createTaskerDtoJson = JsonConvert.SerializeObject(taskerViewModel);
 
 
-            await _httpClientService.EditAsync(userId, taskerViewModel.Id, );
-            return RedirectToAction("Index");
-        }*/
+             TempData["CreateTaskerDto"] = createTaskerDtoJson;
+
+
+             await _httpClientService.EditAsync(userId, taskerViewModel.Id, );
+             return RedirectToAction("Index");
+         }*/
     }
 }

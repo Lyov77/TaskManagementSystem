@@ -73,7 +73,7 @@ namespace TaskManagementSystem.API.Controllers
         }
 
 
-        [HttpPut("deleteTask/{userId}/{taskerId}")]
+        [HttpPost("deleteTask/{userId}/{taskerId}")]
         public async Task<IActionResult> DeleteAsync(string userId, Guid taskerId)
         {
             var entity = await _taskerRepository

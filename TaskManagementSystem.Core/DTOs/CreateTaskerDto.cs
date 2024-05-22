@@ -5,9 +5,13 @@ namespace TaskManagementSystem.Core.DTOs
     public class CreateTaskerDto
     {
         public string UserId { get; set; }
+
         [Required(ErrorMessage = "Title is required")]
-        public string Title { get; set; } = string.Empty;
+        [StringLength(1, ErrorMessage = "Title must not be empty")]
+        public string Title { get; set; }
+
         [Required(ErrorMessage = "Description is required")]
-        public string Description { get; set; } = string.Empty;
+        [MinLength(1, ErrorMessage = "Description must not be empty")]
+        public string Description { get; set; }
     }
 }

@@ -36,19 +36,19 @@
         <tbody>
             @for (var i = 0; i < Model.Count; i++)
             {
-                var task = Model[i];
+                var tasker = Model[i];
                 <tr>
                     <td>@(i + 1)</td>
-                    <td><strong>@task.Title</strong></td>
-                    <td>@task.Description</td>
-                    <td>@(task.IsCompleted ? "Yes" : "No")</td>
+                    <td><strong>@tasker.Title</strong></td>
+                    <td>@tasker.Description</td>
+                    <td>@(tasker.IsCompleted ? "Yes" : "No")</td>
                     <td class="text-center">
                         <div class="btn-group" role="group">
-                            <a class="btn btn-primary" asp-controller="Tasker" asp-action="Edit" asp-route-id="@task.Id" >Edit</a>
+                            <a class="btn btn-primary" asp-controller="Tasker" asp-action="Edit" asp-route-id="@tasker.Id">Edit</a>
                             <span class="mx-3"></span>
-                            <a class="btn btn-danger" asp-controller="Tasker" asp-action="Delete" asp-route-id="@task.Id" asp-route-userId="userId" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
+                            <a class="btn btn-danger" asp-controller="Tasker" asp-action="Delete" asp-route-id="@tasker.Id" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
                             <span class="mx-3"></span>
-                            <a class="btn btn-success" asp-controller="Tasker" asp-action="ChangeStatus" asp-route-id="@task.Id" asp-route-userId="userId">Change Status</a>
+                            <a class="btn btn-success" asp-controller="Tasker" asp-action="ChangeStatus" asp-route-id="@tasker.Id" asp-route-userId="userId">Change Status</a>
                         </div>
                     </td>
                 </tr>
