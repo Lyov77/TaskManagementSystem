@@ -33,23 +33,22 @@ namespace TaskManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateTaskerDto createTaskerDto)
         {
-
-            if (createTaskerDto.Title is null || createTaskerDto.Description is null)
-            //if (!ModelState.IsValid)
-            {
-                // If the model state is not valid, return the view with validation errors
-                return View();
-            }
-
-            var userId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            createTaskerDto.UserId = userId;
-
             var taskerViewModel = new TaskerViewModel
             {
                 Id = Guid.NewGuid(),
                 Title = createTaskerDto.Title,
                 Description = createTaskerDto.Description,
             };
+
+            //if (createTaskerDto.Title is null || createTaskerDto.Description is null)
+            if (!ModelState.IsValid)
+            {
+                return View(taskerViewModel);
+            }
+
+            var userId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            createTaskerDto.UserId = userId;
+
 
             var createTaskerDtoJson = JsonConvert.SerializeObject(taskerViewModel);
             TempData["CreateTaskerDto"] = createTaskerDtoJson;
@@ -75,7 +74,7 @@ namespace TaskManagementSystem.Controllers
         }
 
 
-        public async Task<IActionResult> Delete([FromRoute] Guid taskerId)
+        public async Task<IActionResult> Delete(Guid taskerId)
         {
             var userId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
             await _httpClientService.DeleteAsync(userId, taskerId);

@@ -44,11 +44,11 @@
                     <td>@(tasker.IsCompleted ? "Yes" : "No")</td>
                     <td class="text-center">
                         <div class="btn-group" role="group">
-                            <a class="btn btn-primary" asp-controller="Tasker" asp-action="Edit" asp-route-id="@tasker.Id">Edit</a>
+                            <a class="btn btn-primary" asp-controller="Tasker" asp-action="Edit" asp-route-taskerId="@tasker.Id">Edit</a>
                             <span class="mx-3"></span>
-                            <a class="btn btn-danger" asp-controller="Tasker" asp-action="Delete" asp-route-id="@tasker.Id" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
+                            <a class="btn btn-danger" asp-controller="Tasker" asp-action="Delete" asp-route-taskerId="@tasker.Id" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
                             <span class="mx-3"></span>
-                            <a class="btn btn-success" asp-controller="Tasker" asp-action="ChangeStatus" asp-route-id="@tasker.Id" asp-route-userId="userId">Change Status</a>
+                            <a class="btn btn-success" asp-controller="Tasker" asp-action="ChangeStatus" asp-route-taskerId="@tasker.Id">Change Status</a>
                         </div>
                     </td>
                 </tr>

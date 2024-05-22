@@ -32,7 +32,7 @@ namespace TaskManagementSystem.API.Controllers
                 Description = dto.Description,
             };
 
-            _taskerRepository.Add(entity);
+            await _taskerRepository.AddAsync(entity);
             await _repositoryManager.CommitAsync();
             return Ok();
         }

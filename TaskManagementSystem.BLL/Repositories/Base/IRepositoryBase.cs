@@ -5,7 +5,7 @@ namespace TaskManagementSystem.BLL.Repositories.Base
 {
     public interface IRepositoryBase<TEntity> where TEntity : EntityBase
     {
-        TEntity Add(TEntity entity);
+        Task<TEntity> AddAsync(TEntity entity);
         void Delete(TEntity entity);
         TEntity Update(TEntity entity);
         IQueryable<TEntity> GetAll(Expression<Func<TEntity, bool>>? expression = null, bool noTrack = false);

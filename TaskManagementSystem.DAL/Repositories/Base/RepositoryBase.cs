@@ -12,9 +12,9 @@ namespace TaskManagementSystem.DAL.Repositories.Base
         protected RepositoryBase(TaskerApplicationDbContext context)
             => _context = context;
 
-        public TEntity Add(TEntity entity)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
-            _context.Set<TEntity>().Add(entity);
+            await _context.Set<TEntity>().AddAsync(entity);
             return entity;
         }
 
