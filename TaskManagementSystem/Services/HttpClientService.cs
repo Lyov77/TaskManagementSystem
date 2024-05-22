@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-using TaskManagementSystem.Core.ViewModel;
+﻿using TaskManagementSystem.Core.ViewModel;
 
 namespace TaskManagementSystem.Services
 {
@@ -33,6 +32,21 @@ namespace TaskManagementSystem.Services
         public async Task ChangeStatusAsync(string userId, Guid taskerId)
         {
             await _client.ChangeStatusAsync(userId, taskerId);
+        }
+
+        public async Task EditAsync(string userId, Guid taskerId, TaskerDto tasker)
+        {
+            await _client.EditTaskAsync(userId, taskerId, tasker);
+        }
+
+        public async Task DeleteAsync(string userId, Guid taskerId)
+        {
+            await _client.DeleteTaskAsync(userId, taskerId);
+        }
+
+        public async Task AddAsync(CreateTaskerDto createTaskerDto)
+        {
+            await _client.AddAsync(createTaskerDto);
         }
     }
 }

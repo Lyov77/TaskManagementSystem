@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using TaskManagementSystem.Core.ViewModel
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+         <div class="form-group">
+            <a class="btn btn-success" asp-controller="Tasker" asp-action="Create">Create New Task</a>
+        </div>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+</ul>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th style="width: 20%">Title</th> 
+                <th style="width: 40%">Description</th> 
+                <th style="width: 10%">Completed</th> 
+                <th class="text-center" style="width: 30%">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var i = 0; i < Model.Count; i++)
+            {
+                var task = Model[i];
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td><strong>@task.Title</strong></td>
+                    <td>@task.Description</td>
+                    <td>@(task.IsCompleted ? "Yes" : "No")</td>
+                    <td class="text-center">
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-primary" asp-controller="Tasker" asp-action="Edit" asp-route-id="@task.Id" >Edit</a>
+                            <span class="mx-3"></span>
+                            <a class="btn btn-danger" asp-controller="Tasker" asp-action="Delete" asp-route-id="@task.Id" asp-route-userId="userId" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a>
+                            <span class="mx-3"></span>
+                            <a class="btn btn-success" asp-controller="Tasker" asp-action="ChangeStatus" asp-route-id="@task.Id" asp-route-userId="userId">Change Status</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

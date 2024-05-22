@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using TaskManagementSystem.Core.ViewModel;
 using TaskManagementSystem.Models;
 using TaskManagementSystem.Services;
 
@@ -20,12 +18,14 @@ namespace TaskManagementSystem.Controllers
 
         public IActionResult Index()
         {
-            var userId = User?.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
-            ViewBag.UserId = userId; 
-            
-            return View(userId);
+            var userId = User?.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+       
+            if (userId == null)
+            {
+               return View();
+            }
 
-            
+            return RedirectToAction("Index", "Tasker");
         }
 
         public IActionResult Privacy()
@@ -39,13 +39,6 @@ namespace TaskManagementSystem.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
-        {
-            var userId = Guid.Parse(User?.Claims.First().Value);
-            var result = await _httpClientService.GetAll(userId.ToString());
-            return View(result);
-        }
+       
     }
 }
