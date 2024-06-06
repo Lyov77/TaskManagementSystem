@@ -12,20 +12,10 @@ namespace TaskManagementSystem.DAL.Repositories.Base
         protected RepositoryBase(TaskerApplicationDbContext context)
             => _context = context;
 
-        public async Task<TEntity> AddAsync(TEntity entity)
-        {
-            await _context.Set<TEntity>().AddAsync(entity);
-            return entity;
-        }
 
-        public void Delete(TEntity entity)
+        public async Task<TEntity> GetByIdAsync(Guid id)
         {
-            _context.Remove(entity);
-        }
-
-        public TEntity Update(TEntity entity)
-        {
-            _context.Update(entity);
+            TEntity? entity = await _context.Set<TEntity>().FindAsync(id);
             return entity;
         }
 
@@ -41,6 +31,23 @@ namespace TaskManagementSystem.DAL.Repositories.Base
             var query = _context.Set<TEntity>().Where(expression);
 
             return noTrack ? query : query.AsNoTracking();
+        }
+
+        public async Task<TEntity> AddAsync(TEntity entity)
+        {
+            await _context.Set<TEntity>().AddAsync(entity);
+            return entity;
+        }
+
+        public void Delete(TEntity entity)
+        {
+            _context.Remove(entity);
+        }
+
+        public TEntity Update(TEntity entity)
+        {
+            _context.Update(entity);
+            return entity;
         }
     }
 }

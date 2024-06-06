@@ -21,6 +21,13 @@
     }
 </ul>
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
+
 @if (SignInManager.IsSignedIn(User))
 {
     <table class="table table-striped">

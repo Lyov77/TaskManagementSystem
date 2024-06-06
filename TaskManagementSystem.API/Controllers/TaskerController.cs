@@ -22,20 +22,28 @@ namespace TaskManagementSystem.API.Controllers
             _repositoryManager = repositoryManager;
         }
 
-        [HttpPost("add")]
-        public async Task<IActionResult> AddAsync([FromBody] CreateTaskerDto dto)
+        [HttpGet("get/{taskerId}")]
+        public async Task<ActionResult<TaskerDto>> GetByIdAsync([FromRoute]Guid taskerId)
         {
-            var entity = new Tasker
-            {
-                UserId = dto.UserId,
-                Title = dto.Title,
-                Description = dto.Description,
-            };
+            var tasker = await _taskerRepository
+                .GetAll(x => x.Id == taskerId && !x.IsDeleted)
+                .Select(x => new TaskerDto
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Description = x.Description,
+                    IsCompleted = x.IsCompleted
+                })
+                .FirstOrDefaultAsync();
 
-            await _taskerRepository.AddAsync(entity);
-            await _repositoryManager.CommitAsync();
-            return Ok();
+            if (tasker == null)
+            {
+                return NotFound(); // Return 404 Not Found if the tasker with the given ID is not found
+            }
+
+            return Ok(tasker);
         }
+
 
         [HttpGet("getAll/{userId}")]
         public async Task<ActionResult<TaskerDto[]>> GetAllAsync([FromRoute] string userId)
@@ -54,7 +62,47 @@ namespace TaskManagementSystem.API.Controllers
             return Ok(taskers);
         }
 
-        [HttpPut("changeStatus/{userId}/{taskerId}")]
+
+        [HttpPost("add")]
+        public async Task<IActionResult> AddAsync([FromBody] CreateTaskerDto dto)
+        {
+            var entity = new Tasker
+            {
+                UserId = dto.UserId,
+                Title = dto.Title,
+                Description = dto.Description,
+            };
+
+            await _taskerRepository.AddAsync(entity);
+            await _repositoryManager.CommitAsync();
+            return Ok();
+        }
+
+
+        [HttpPost("editTask/{userId}/{taskerId}")]
+        public async Task<IActionResult> EditAsync(string userId, Guid taskerId, [FromBody] TaskerDto dto)
+        {
+            var entity = await _taskerRepository
+                .GetAll(x => x.UserId == userId && x.Id == taskerId && !x.IsDeleted)
+                .FirstOrDefaultAsync();
+
+            if (entity == null)
+            {
+                return NotFound("Task not found!");
+            }
+
+            entity.Title = dto.Title;
+            entity.Description = dto.Description;
+            entity.IsCompleted = dto.IsCompleted;
+
+
+            _taskerRepository.Update(entity);
+            await _repositoryManager.CommitAsync();
+            return Ok();
+        }
+
+
+        [HttpPost("changeStatus/{userId}/{taskerId}")]
         public async Task<IActionResult> ChangeStatusAsync(string userId, Guid taskerId)
         {
             var entity = await _taskerRepository
@@ -90,30 +138,5 @@ namespace TaskManagementSystem.API.Controllers
             await _repositoryManager.CommitAsync();
             return Ok();
         }
-
-
-        [HttpPut("editTask/{userId}/{taskerId}")]
-        public async Task<IActionResult> EditAsync(string userId, Guid taskerId, [FromBody] TaskerDto dto)
-        {
-            var entity = await _taskerRepository
-                .GetAll(x => x.UserId == userId && x.Id == taskerId && !x.IsDeleted)
-                .FirstOrDefaultAsync();
-
-            if (entity == null)
-            {
-                return NotFound("Task not found!");
-            }
-
-            entity.Title = dto.Title;
-            entity.Description = dto.Description;
-            entity.IsCompleted = dto.IsCompleted;
-
-
-            _taskerRepository.Update(entity);
-            await _repositoryManager.CommitAsync();
-            return Ok();
-        }
-
-
     }
 }

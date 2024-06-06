@@ -3,25 +3,33 @@
 
 @model TaskerViewModel
 
-<h1>Change The Task</h1>
+<h1>Edit Task</h1>
 
 <div asp-validation-summary="All" class="text-danger"></div>
 
-<form asp-controller="Tasker" asp-action="ChangeStatus" method="post">
+<form asp-controller="Tasker" asp-action="Edit" method="post">
+    <input type="hidden" name="taskerId" value="@Model.Id" /> <!-- Ensure the name attribute matches the parameter name -->
+
+    
     <div class="form-group">
-        <label asp-for="Title" class="control-label">Title</label>
+        <label asp-for="Title" class="control-label">New Title</label>
         <input asp-for="Title" class="form-control" />
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Description" class="control-label">Description</label>
+        <label asp-for="Description" class="control-label">New Description</label>
         <textarea asp-for="Description" class="form-control"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
-
     <div class="form-group">
-        <button type="submit" class="btn btn-success" asp-controller="Tasker" asp-action="ChangeCompletedStatus">Create</button>
+        <button type="submit" class="btn btn-success">Edit</button>
     </div>
 </form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

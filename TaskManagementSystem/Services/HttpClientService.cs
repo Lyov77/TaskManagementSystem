@@ -14,6 +14,26 @@ namespace TaskManagementSystem.Services
             _client = new swagger_clientClient(baseUrl, new HttpClient());
         }
 
+        public async Task<TaskerViewModel> GetByIdAsync(Guid taskerId)
+        {
+           var dto = await _client.GetAsync(taskerId);
+
+            if (dto == null)
+            {
+                return null; // Return null if the tasker with the given ID is not found
+            }
+
+            var result = new TaskerViewModel
+            {
+                Id = dto.Id,
+                Title = dto.Title,
+                Description = dto.Description,
+                IsCompleted = dto.IsCompleted
+            };
+
+            return result;
+        }
+
         public async Task<List<TaskerViewModel>> GetAll(string userId)
         {
             var dtos = await _client.GetAllAsync(userId);

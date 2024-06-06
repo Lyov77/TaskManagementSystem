@@ -5,6 +5,7 @@ namespace TaskManagementSystem.BLL.Repositories.Base
 {
     public interface IRepositoryBase<TEntity> where TEntity : EntityBase
     {
+        Task<TEntity> GetByIdAsync(Guid id);
         Task<TEntity> AddAsync(TEntity entity);
         void Delete(TEntity entity);
         TEntity Update(TEntity entity);
