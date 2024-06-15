@@ -23,7 +23,7 @@ namespace TaskManagementSystem.API.Controllers
         }
 
         [HttpGet("get/{taskerId}")]
-        public async Task<ActionResult<TaskerDto>> GetByIdAsync([FromRoute]Guid taskerId)
+        public async Task<ActionResult<TaskerDto>> GetByIdAsync([FromRoute] Guid taskerId)
         {
             var tasker = await _taskerRepository
                 .GetAll(x => x.Id == taskerId && !x.IsDeleted)
@@ -78,7 +78,6 @@ namespace TaskManagementSystem.API.Controllers
             return Ok();
         }
 
-
         [HttpPost("editTask/{userId}/{taskerId}")]
         public async Task<IActionResult> EditAsync(string userId, Guid taskerId, [FromBody] TaskerDto dto)
         {
@@ -100,7 +99,6 @@ namespace TaskManagementSystem.API.Controllers
             await _repositoryManager.CommitAsync();
             return Ok();
         }
-
 
         [HttpPost("changeStatus/{userId}/{taskerId}")]
         public async Task<IActionResult> ChangeStatusAsync(string userId, Guid taskerId)

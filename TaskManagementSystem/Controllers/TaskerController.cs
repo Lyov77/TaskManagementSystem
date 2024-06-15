@@ -8,9 +8,7 @@ namespace TaskManagementSystem.Controllers
     [Controller]
     public class TaskerController : Controller
     {
-
         private readonly IHttpClientService _httpClientService;
-
 
         public TaskerController(IHttpClientService httpClientService)
         {
@@ -75,10 +73,8 @@ namespace TaskManagementSystem.Controllers
 
                 return RedirectToAction("Index");
             }
-
             return RedirectToAction("Index");
         }
-
 
 
         [HttpGet]
@@ -132,10 +128,8 @@ namespace TaskManagementSystem.Controllers
                 ModelState.AddModelError("", "An error occurred while updating the tasker. Please try again.");
                 return View(taskerViewModel);
             }
-
             return RedirectToAction("Index");
         }
-
 
 
         public async Task<IActionResult> Delete(Guid taskerId)
